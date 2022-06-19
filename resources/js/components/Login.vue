@@ -3,10 +3,13 @@
         <v-app-bar app dark color="blue">
             <v-toolbar-title>Vue Login</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn text rounded>Home</v-btn>
+            <!-- <v-btn text rounded>Home</v-btn>
             <v-btn text rounded>Login</v-btn>
             <v-btn text rounded>About</v-btn>
-            <v-btn text rounded>Contact us</v-btn>
+            <v-btn text rounded>Contact us</v-btn> -->
+            <v-btn icon @click="toggle_dark_mode">
+                <v-icon>mdi-theme-light-dark</v-icon>
+            </v-btn>
         </v-app-bar>
 
         <v-main>
@@ -62,11 +65,20 @@
 
 <script>
 export default {
-    name: "App",
+    name: "Login",
     data() {
         return {
             showPassword: false,
         };
+    },
+    methods: {
+        toggle_dark_mode: function () {
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+            localStorage.setItem(
+                "dark_theme",
+                this.$vuetify.theme.dark.toString()
+            );
+        },
     },
 };
 </script>
