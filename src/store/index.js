@@ -5,8 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isLoggin: false,
-    showRegister: true,
+    isLoggin: true,
+    showRegister: false,
 
   },
   getters:{
