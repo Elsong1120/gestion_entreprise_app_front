@@ -6,24 +6,36 @@
     <v-toolbar-title>Company</v-toolbar-title>
     <v-spacer></v-spacer>
 
-    <!-- start -->
-    <v-list color="indigo mt-5" dark>
-      <v-list-group :value="true" prepend-icon="mdi-account-circle">
-        <template v-slot:activator>
-          <v-list-item-title>John Leider</v-list-item-title>
-        </template>
-        <v-list-item link>
-          <v-list-item-content>
-            <v-list-item-title class="text-uppercase"
-              >Log out</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-list-item-icon class="w-25">
+    <v-menu offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        style="background:none; box-shadow:none;"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon class="mr-2">mdi-account-circle</v-icon>
+
+          John Leider
+          <v-icon>mdi-menu-down</v-icon>
+        </v-btn>
+      </template>
+      <v-list color="indigo" dark>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          link
+          @click="isLoggin = false"
+        >
+          <v-list-item-title class="text-uppercase">{{
+            item
+          }}</v-list-item-title>
+          <v-list-item-icon>
             <v-icon color="red">mdi-power</v-icon>
           </v-list-item-icon>
         </v-list-item>
-      </v-list-group>
-    </v-list>
+      </v-list>
+    </v-menu>
 
     <v-btn icon @click="toggle_dark_mode">
       <v-icon>mdi-theme-light-dark</v-icon>
@@ -32,6 +44,8 @@
 </template>
 
 <script>
+import { mapFields } from "vuex-map-fields";
+
 export default {
   data() {
     return {
@@ -43,6 +57,9 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
     },
+  },
+  computed: {
+    ...mapFields(["isLoggin"]),
   },
   mounted() {
     const theme = localStorage.getItem("dark_theme");
