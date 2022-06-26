@@ -19,12 +19,23 @@
         <v-card color="grey lighten-1" class="mb-12">
           <v-card-text>
             <v-form :ref="'stepForm'" v-model="step.valid" lazy-validation>
-              <v-text-field
-                v-for="(fieldName, index) in step.fieldnames"
-                :key="index"
-                :label="fieldName + '...'"
-                :rules="step.rules"
-              ></v-text-field>
+              <template v-for="(fieldName, index) in step.fieldnames">
+                <v-text-field
+                  v-if="step.name == 'Company'"
+                  :key="index"
+                  :label="fieldName + '...'"
+                  :rules="step.rules"
+                  @blur="fieldName == 'VAT Number' ? checkVatNumber() : ''"
+                  v-model="companyDatas[tabNameRef[index]]"
+                ></v-text-field>
+                <v-text-field
+                  v-else
+                  :key="index"
+                  :label="fieldName + '...'"
+                  :rules="step.rules"
+                  v-model="contactPersonDatas[tabNameRef2[index]]"
+                ></v-text-field>
+              </template>
             </v-form>
           </v-card-text>
         </v-card>
@@ -43,8 +54,40 @@
 </template>
 
 <script>
+// import { mapFields } from "vuex-map-fields";
+import axios from "axios";
+
 export default {
   data: () => ({
+    tabNameRef: [
+      "vatNumber",
+      "name",
+      "activity",
+      "strAddress",
+      "city",
+      "zip_code",
+      "country",
+      "fix_number",
+    ],
+    tabNameRef2: ["email", "nom", "num"],
+    companyDatas: {
+      valid: null,
+      vatNumber: "",
+      name: "",
+      street: "",
+      number: "",
+      zip_code: "",
+      city: "",
+      country: "",
+      countryCode: "",
+
+      strAddress: "",
+    },
+    contactPersonDatas: {
+      email: "",
+      nom: "",
+      num: "",
+    },
     curr: 1,
     lastStep: 2,
     steps: [
@@ -75,7 +118,36 @@ export default {
     valid: false,
     stepForm: [],
   }),
+  computed: {},
   methods: {
+    getCurrentIndex(index) {
+      this.currentIndex = index;
+    },
+    checkVatNumber() {
+      let vatNumber = this.companyDatas.vatNumber;
+      console.log(vatNumber);
+      axios
+        .get(
+          //   "http://13.38.138.92/api/companies/" +
+          //     this.companyDatas.num_tva +
+          //     "/info"
+          " http://127.0.0.1:8000/api/v1/vatnumber/" + vatNumber + "/check"
+        )
+        .then((response) => {
+          console.log("controler", response);
+          let RequestisValid = response.status == 200 && response.data.valid;
+          if (RequestisValid) {
+            this.companyDatas.vatNumber = response.data.vatNumber;
+            this.companyDatas.name = response.data.name;
+            this.companyDatas.strAddress = response.data.strAddress;
+            this.companyDatas.city = response.data.address.city;
+            this.companyDatas.zip_code = response.data.address.zip_code;
+            this.companyDatas.country = response.data.address.country;
+          }
+
+          console.log(vatNumber);
+        });
+    },
     stepComplete(step) {
       return this.curr > step;
     },
