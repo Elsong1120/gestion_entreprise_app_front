@@ -47,7 +47,7 @@
           >Continue</v-btn
         >
         <v-btn v-else color="success" @click="done()">Done</v-btn>
-        <v-btn text @click="curr = n">Back</v-btn>
+        <v-btn text @click="curr > 1 ? (curr = n) : ''">Back</v-btn>
       </v-stepper-content>
     </v-stepper>
   </v-container>
@@ -58,6 +58,17 @@
 import axios from "axios";
 
 export default {
+  beforeMount() {
+    if (
+      localStorage.getItem("companyDatas") &&
+      localStorage.getItem("contactPersonDatas")
+    ) {
+      this.companyDatas = JSON.parse(localStorage.getItem("companyDatas"));
+      this.contactPersonDatas = JSON.parse(
+        localStorage.getItem("contactPersonDatas")
+      );
+    }
+  },
   data: () => ({
     tabNameRef: [
       "vatNumber",
@@ -120,9 +131,6 @@ export default {
   }),
   computed: {},
   methods: {
-    getCurrentIndex(index) {
-      this.currentIndex = index;
-    },
     checkVatNumber() {
       let vatNumber = this.companyDatas.vatNumber;
       console.log(vatNumber);
@@ -162,9 +170,16 @@ export default {
         // continue to next
         this.curr = n + 2;
       }
+        localStorage.setItem("companyDatas", JSON.stringify(this.companyDatas));
+        localStorage.setItem(
+          "contactPersonDatas",
+          JSON.stringify(this.contactPersonDatas)
+        );
     },
     done() {
-      this.curr = 5;
+      this.validate(1);
+
+      this.curr = 2;
     },
   },
 };
