@@ -2,7 +2,7 @@
   <v-container>
     <h1 class="mb-4">Informations of the company</h1>
     <v-stepper v-model="curr" color="green">
-      <v-stepper-header class="overflow-x-auto">
+      <v-stepper-header class="overflow-x-auto d-flex justify-content-evenly">
         <v-stepper-step
           v-for="(step, n) in steps"
           :key="n"
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-// import { mapFields } from "vuex-map-fields";
+import { mapFields } from "vuex-map-fields";
 import axios from "axios";
 
 export default {
@@ -123,13 +123,13 @@ export default {
         valid: true,
         fieldnames: ["email", "name", "phone number"],
       },
-
-      { name: "Complete" },
     ],
     valid: false,
     stepForm: [],
   }),
-  computed: {},
+  computed: {
+    ...mapFields(["profileCompleted"]),
+  },
   methods: {
     checkVatNumber() {
       let vatNumber = this.companyDatas.vatNumber;
@@ -167,19 +167,21 @@ export default {
       let v = this.$refs.stepForm[n].validate();
       if (v) {
         this.steps[n].valid = true;
+        if (n == 1) this.profileCompleted = true;
         // continue to next
         this.curr = n + 2;
       }
-        localStorage.setItem("companyDatas", JSON.stringify(this.companyDatas));
-        localStorage.setItem(
-          "contactPersonDatas",
-          JSON.stringify(this.contactPersonDatas)
-        );
+      localStorage.setItem("companyDatas", JSON.stringify(this.companyDatas));
+      localStorage.setItem(
+        "contactPersonDatas",
+        JSON.stringify(this.contactPersonDatas)
+      );
     },
     done() {
       this.validate(1);
 
       this.curr = 2;
+      this.$router.push({ path: "/dashboard/profilecompany" });
     },
   },
 };

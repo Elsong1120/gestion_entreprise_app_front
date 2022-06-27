@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    profileCompleted:false,
     isLoggin: true,
     showRegister: false,
     companyDatas: {

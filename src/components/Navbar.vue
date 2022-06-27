@@ -1,8 +1,10 @@
 <template>
   <v-navigation-drawer v-model="drawer" app>
     <v-list dense>
+      <template        v-for="(dataLink, index) in navigationDatas">
+
       <v-list-item
-        v-for="(dataLink, index) in navigationDatas"
+        v-if="index<1 || profileCompleted "
         :key="'navigation-item--' + index"
         link
         exact
@@ -15,11 +17,15 @@
           <v-list-item-title>{{ dataLink.text }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      </template>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+import { mapFields } from "vuex-map-fields";
+
 export default {
   data() {
     return {
@@ -31,8 +37,17 @@ export default {
           link: "/",
           icon: "mdi-home",
         },
+        {
+          text: "Profile Company",
+          link: "/dashboard/profilecompany",
+          icon: "mdi-domain",
+        },
       ],
     };
+  },
+
+  computed: {
+    ...mapFields(["profileCompleted"]),
   },
 };
 </script>
