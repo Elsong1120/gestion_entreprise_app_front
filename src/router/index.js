@@ -8,6 +8,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
+
     component: Home,
   },
   {
@@ -42,8 +43,8 @@ router.beforeEach((to, from, next) => {
     // if not, redirect to login page.
     if (!store.state.isLoggin || !store.state.profileCompleted) {
       next({ name: "Home" });
-    }
-    {
+      console.log(from.path);
+    } else {
       next();
     }
   } else {

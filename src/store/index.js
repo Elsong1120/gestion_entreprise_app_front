@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    profileCompleted:false,
+    profileCompleted: true,
     isLoggin: true,
     showRegister: false,
     companyDatas: {
@@ -23,6 +23,11 @@ export default new Vuex.Store({
         countryCode: "",
       },
       strAddress: "",
+    },
+    contactPersonDatas: {
+      email: "",
+      nom: "",
+      num: "",
     },
   },
   getters: {

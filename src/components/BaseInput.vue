@@ -14,6 +14,31 @@
     </label>
 </template>
 
+<template>
+  <v-tabs fixed-tabs background-color="indigo" dark>
+    <v-tabs-slider color="yellow"></v-tabs-slider>
+
+    <v-tab> Profile company </v-tab>
+
+    <v-tab-items v-model="tab">
+      <v-tab-item>
+        <v-card color="grey lighten-1" class="mb-12">
+          <v-card-text>
+            <v-form>
+              <v-text-field
+                v-for="(companydata, index) in companyDatas"
+                :key="index"
+                v-model="companyDatas[tabNameRef[idex]]"
+              >
+              </v-text-field>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tab-items>
+    <v-tab> Person of contact </v-tab>
+  </v-tabs>
+</template>
 <script>
     export default {
         name: "BaseInput",
